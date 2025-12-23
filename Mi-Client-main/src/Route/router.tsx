@@ -33,6 +33,8 @@ import {
 } from "./ProtectedRoute";
 
 import RouterHomePage from "./routerHomePage";
+import { ShowPriorityOrStatusWrapper } from "../Components/showStatusOrPriority";
+import { ManagePrioritiesAndStatusesWrapper } from "../Components/ManagePrioritiesAndStatuses";
 
 export const router = createBrowserRouter([
     {
@@ -60,7 +62,7 @@ export const router = createBrowserRouter([
             { path: "/logout", element: <Logout /> },
             { path: "/404", element: <Error404 /> },
 
-            
+
             {
                 path: "/*",
                 element: <Navigate to="/404" replace />
@@ -142,6 +144,14 @@ export const router = createBrowserRouter([
                 )
             },
             {
+                path: "/manage/:type",
+                element: (
+                    <ProtectedAdminRoute>
+                        <ManagePrioritiesAndStatusesWrapper />
+                    </ProtectedAdminRoute>
+                )
+            },
+            {
                 path: "/user/:id",
                 element: (
                     <ProtectedAdminRoute>
@@ -157,7 +167,22 @@ export const router = createBrowserRouter([
                     </ProtectedAdminRoute>
                 )
             },
-
+            {
+                path: "/praiorities/:type",
+                element: (
+                    <ProtectedAdminRoute>
+                        <ShowPriorityOrStatusWrapper />
+                    </ProtectedAdminRoute>
+                )
+            },
+            {
+                path: "/statuses/:type",
+                element: (
+                    <ProtectedAdminRoute>
+                        <ShowPriorityOrStatusWrapper />
+                    </ProtectedAdminRoute>
+                )
+            },
             // ===== admin or agent =====
             {
                 path: "/ticket/update/:id",

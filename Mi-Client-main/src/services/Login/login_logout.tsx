@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { useUserContext } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
 import { Container, Box, Card, CardHeader, CardContent, TextField, Button, Stack, Typography, Divider, Link } from "@mui/material";
+import { Logout as LogoutIcon, ArrowBack as BackIcon } from "@mui/icons-material";
 
 interface LoginFormInputs {
   email: string;
@@ -153,25 +154,85 @@ export const Logout: React.FC = () => {
     navigate("/login");
   };
 
-  return (<Box >
-    <p style={{ textAlign: 'center', marginTop: 25, fontSize:30, fontFamily: 'Arial, sans-serif' }}>?האם אתה בטוח שברצונך להתנתק</p>
-    <Button
-      variant="outlined"
-      onClick={handleLogout}
-      sx={{ borderColor: '#e2e8f0', color: '#1e293b' , margin: '50px'}}
-    >
-      התנתק
-    </Button>
-    <Button 
-    variant="outlined"
-      onClick={() => navigate(-1)}
-      sx={{ borderColor: '#e2e8f0', color: '#1e293b' , margin: '50px'}}
-    >
-      חזור
-    </Button>
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{ py: 8, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '60vh' }}>
+        {/* Card */}
+        <Card
+          sx={{
+            background: 'linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%)',
+            border: '1px solid #fecaca',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          <CardContent sx={{ p: 4, textAlign: 'center' }}>
+            {/* Icon */}
+            <Box sx={{ mb: 3, display: 'flex', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: '50%',
+                  backgroundColor: '#fee2e2',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <LogoutIcon sx={{ fontSize: 40, color: '#dc2626' }} />
+              </Box>
+            </Box>
 
+            {/* Title */}
+            <Typography variant="h4" sx={{ fontWeight: 700, color: '#1e293b', mb: 2 }}>
+              התנתקות
+            </Typography>
 
-  </Box>);
-}
+            {/* Message */}
+            <Typography variant="body1" sx={{ color: '#64748b', mb: 4, lineHeight: 1.6 }}>
+              האם אתה בטוח שברצונך להתנתק מהחשבון שלך?
+            </Typography>
+
+            <Divider sx={{ my: 3 }} />
+
+            {/* Action Buttons */}
+            <Stack direction="row" spacing={2} sx={{ justifyContent: 'center' }}>
+              <Button
+                variant="contained"
+                startIcon={<LogoutIcon />}
+                onClick={handleLogout}
+                sx={{
+                  backgroundColor: '#dc2626',
+                  '&:hover': { backgroundColor: '#b91c1c' },
+                  px: 4,
+                }}
+              >
+                התנתק
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<BackIcon />}
+                onClick={() => navigate(-1)}
+                sx={{
+                  borderColor: '#e2e8f0',
+                  color: '#1e293b',
+                  '&:hover': { borderColor: '#2563eb', backgroundColor: '#f0f9ff' },
+                  px: 4,
+                }}
+              >
+                חזור
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* Footer Message */}
+        <Typography variant="caption" sx={{ color: '#94a3b8', textAlign: 'center', mt: 4 }}>
+          תוכל להתחבר שוב בכל עת
+        </Typography>
+      </Box>
+    </Container>
+  );
+};
 
 export default LoginForm;

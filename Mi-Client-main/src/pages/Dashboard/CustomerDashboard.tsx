@@ -11,6 +11,7 @@ import {
   Description as TicketsIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
+import { DashboardCharts } from "../../Components/DashboardCharts";
 
 const CustomerDashboard: React.FC = () => {
   const user = localStorage.getItem("user");
@@ -112,6 +113,9 @@ const CustomerDashboard: React.FC = () => {
             </Box>
           ))}
         </Box>
+
+        {/* Charts Section */}
+        <DashboardCharts />
 
         {/* Info Card */}
         <Card sx={{ border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>

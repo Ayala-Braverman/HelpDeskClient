@@ -10,6 +10,7 @@ import {
 import {
   Description as TicketsIcon,
 } from "@mui/icons-material";
+import { DashboardCharts } from "../../Components/DashboardCharts";
 
 const AgentDashboard: React.FC = () => {
   const user = localStorage.getItem("user");
@@ -102,6 +103,9 @@ const AgentDashboard: React.FC = () => {
             </Box>
           ))}
         </Box>
+
+        {/* Charts Section */}
+        <DashboardCharts />
 
         {/* Info Card */}
         <Card sx={{ mt: 4, border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>

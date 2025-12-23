@@ -14,6 +14,7 @@ import {
   CheckCircle as StatusIcon,
   Flag as PriorityIcon,
 } from "@mui/icons-material";
+import { DashboardCharts } from "../../Components/DashboardCharts";
 
 const AdminDashboard: React.FC = () => {
   const user = localStorage.getItem("user");
@@ -40,14 +41,14 @@ const AdminDashboard: React.FC = () => {
       label: "ניהול סטטוסים",
       description: "הגדר סטטוסים לפניות",
       icon: <StatusIcon sx={{ fontSize: 40, color: "#2563eb" }} />,
-      onClick: () => navigate("/createStatus"),
+      onClick: () => navigate("/manage/statuses"),
     },
     {
       id: 4,
       label: "ניהול עדיפויות",
       description: "הגדר רמות עדיפות לפניות",
       icon: <PriorityIcon sx={{ fontSize: 40, color: "#2563eb" }} />,
-      onClick: () => navigate("/createPriority"),
+      onClick: () => navigate("/manage/priorities"),
     },
   ];
 
@@ -73,16 +74,6 @@ const AdminDashboard: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
-
-        {/* Admin Panel Section */}
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, color: "#1e293b" }}>
-            חדר בקרה למנהלים
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#64748b", mb: 3 }}>
-            ניהול משתמשים והגדרות מערכת כאן
-          </Typography>
-        </Box>
 
         {/* Action Cards Grid */}
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: 4 }}>
@@ -128,6 +119,9 @@ const AdminDashboard: React.FC = () => {
           ))}
         </Box>
 
+        {/* Charts Section */}
+        <DashboardCharts />
+
         {/* Quick Actions */}
         <Card sx={{ border: "1px solid #e2e8f0" }}>
           <CardContent sx={{ p: 3 }}>
@@ -144,28 +138,6 @@ const AdminDashboard: React.FC = () => {
                 }}
               >
                 + יצירת משתמש חדש
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => navigate("/createPriority")}
-                sx={{
-                  borderColor: "#e2e8f0",
-                  color: "#1e293b",
-                  "&:hover": { borderColor: "#2563eb", backgroundColor: "#f0f9ff" },
-                }}
-              >
-                + הוספת עדיפות
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => navigate("/createStatus")}
-                sx={{
-                  borderColor: "#e2e8f0",
-                  color: "#1e293b",
-                  "&:hover": { borderColor: "#2563eb", backgroundColor: "#f0f9ff" },
-                }}
-              >
-                + הוספת סטטוס
               </Button>
             </Box>
           </CardContent>

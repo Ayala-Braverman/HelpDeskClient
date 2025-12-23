@@ -52,8 +52,8 @@ export const SideNav: React.FC<SideNavProps> = ({ collapsed = false }) => {
     if (user?.role === 'admin') {
       roleSpecificItems.push(
         { label: 'משתמשים', icon: PeopleIcon, path: '/users', roles: ['admin'] },
-        { label: 'סטטוסים', icon: StatusIcon, path: '/createStatus', roles: ['admin'] },
-        { label: 'עדיפויות', icon: PriorityIcon, path: '/createPriority', roles: ['admin'] }
+        { label: 'סטטוסים', icon: StatusIcon, path: '/manage/statuses', roles: ['admin'] },
+        { label: 'עדיפויות', icon: PriorityIcon, path: '/manage/priorities', roles: ['admin'] }
       )
     }
 

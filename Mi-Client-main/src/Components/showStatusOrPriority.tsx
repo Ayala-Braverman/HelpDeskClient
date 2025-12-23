@@ -1,9 +1,18 @@
 import React from "react";
 import Swal from "sweetalert2";
 import { usePriorityQuery, useStatusQuery } from "../Query/useQuery";
+import { useParams } from "react-router-dom";
 
 type Props = { type: "priorities" | "statuses" };
 type Item = { id: number; name: string };
+
+export const ShowPriorityOrStatusWrapper: React.FC = () => {
+   const { type } = useParams();
+   if (type !== "priorities" && type !== "statuses") {
+     return <div>Invalid type</div>;
+   }
+   return <ShowPriorityOrStatus type={type} />;
+}
 
 export const ShowPriorityOrStatus: React.FC<Props> = ({ type }) => {
   const prioritiesQ = usePriorityQuery();
