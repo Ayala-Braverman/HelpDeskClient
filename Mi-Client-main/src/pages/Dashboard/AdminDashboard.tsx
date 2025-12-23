@@ -139,6 +139,26 @@ const AdminDashboard: React.FC = () => {
               >
                 + יצירת משתמש חדש
               </Button>
+                <Button
+                variant="contained"
+                onClick={() => navigate("/createPriority")}
+                sx={{
+                  backgroundColor: "#2563eb",
+                  "&:hover": { backgroundColor: "#1e40af" },
+                }}
+              >
+                + יצירת עדיפות חדשה
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate("/createStatus")}
+                sx={{
+                  backgroundColor: "#2563eb",
+                  "&:hover": { backgroundColor: "#1e40af" },
+                }}
+              >
+                + יצירת סטטוס חדש
+              </Button>
             </Box>
           </CardContent>
         </Card>
