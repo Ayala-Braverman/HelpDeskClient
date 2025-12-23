@@ -77,7 +77,7 @@ export const AddStatusOrPriorityForm: React.FC<{ type: string }> = ({ type }) =>
                 title: "בהצלחה!",
                 text: `ה${typeLabel} נוסף בהצלחה.`,
             }).then(() => {
-                navigate(type === "priorities" ? "/priorities" : "/statuses");
+                navigate(-1);
             });
         }
         catch (error) {

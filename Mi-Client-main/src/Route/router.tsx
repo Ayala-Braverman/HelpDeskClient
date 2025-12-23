@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 
 import CustomerDashboard from "../pages/Dashboard/CustomerDashboard";
@@ -59,6 +59,13 @@ export const router = createBrowserRouter([
             { path: "/register", element: <RegisterForm /> },
             { path: "/logout", element: <Logout /> },
             { path: "/404", element: <Error404 /> },
+
+            
+            {
+                path: "/*",
+                element: <Navigate to="/404" replace />
+            },
+        
 
             {
                 path: "/",

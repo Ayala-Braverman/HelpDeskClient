@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Ticket, TicketById } from '../types/ticket';
-import { useTicketsQuery } from '../Query/useQuery';
+import { useTicketsQuery, usePriorityQuery, useStatusQuery } from '../Query/useQuery';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getTicketById } from '../services/Tickets/TicketFunctions';
 import { ShowComments } from './CommentsComponents';
@@ -38,6 +38,8 @@ import {
 
 export const ShowTickets: React.FC = () => {
   const ticketsQuery = useTicketsQuery();
+  const prioritiesQuery = usePriorityQuery();
+  const statusesQuery = useStatusQuery();
   const ticketsArray = (ticketsQuery.data as Ticket[]) || [];
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -50,28 +52,25 @@ export const ShowTickets: React.FC = () => {
   };
 
   const getStatusLabel = (statusId: number): string => {
-    const statuses: { [key: number]: string } = {
-      1: 'פתוח',
-      2: 'בטיפול',
-      3: 'סגור',
-    };
-    return statuses[statusId] || 'לא ידוע';
+    const statusesData = (Array.isArray(statusesQuery.data) ? statusesQuery.data : []) as any[];
+    const status = statusesData.find((s: any) => s.id === statusId);
+    return status?.name || 'לא ידוע';
   };
 
   const getPriorityColor = (priorityId: number): 'error' | 'warning' | 'info' | 'success' => {
-    if (priorityId === 1) return 'error';
-    if (priorityId === 2) return 'warning';
-    if (priorityId === 3) return 'info';
-    return 'success';
+    const prioritiesData = (Array.isArray(prioritiesQuery.data) ? prioritiesQuery.data : []) as any[];
+    const priorityIndex = prioritiesData.findIndex((p: any) => p.id === priorityId);
+    
+    if (priorityIndex === 0) return 'error';      // First priority = highest (red)
+    if (priorityIndex === 1) return 'warning';    // Middle priority (orange)
+    if (priorityIndex === 2) return 'info';       // Lower priority (blue)
+    return 'success';                              // Default (green)
   };
 
   const getPriorityLabel = (priorityId: number): string => {
-    const priorities: { [key: number]: string } = {
-      1: 'גבוהה',
-      2: 'בינונית',
-      3: 'נמוכה',
-    };
-    return priorities[priorityId] || 'לא ידוע';
+    const prioritiesData = (Array.isArray(prioritiesQuery.data) ? prioritiesQuery.data : []) as any[];
+    const priority = prioritiesData.find((p: any) => p.id === priorityId);
+    return priority?.name || 'לא ידוע';
   };
 
   return (
@@ -157,6 +156,8 @@ export const GetTicketByIdWrapper: React.FC = () => {
 export const GetTicketById: React.FC<{ id: number }> = ({ id }) => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const prioritiesQuery = usePriorityQuery();
+  const statusesQuery = useStatusQuery();
   const [ticket, setTicket] = useState<TicketById | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -194,12 +195,9 @@ export const GetTicketById: React.FC<{ id: number }> = ({ id }) => {
   }
 
   const getStatusLabel = (statusId: number): string => {
-    const statuses: { [key: number]: string } = {
-      1: 'פתוח',
-      2: 'בטיפול',
-      3: 'סגור',
-    };
-    return statuses[statusId] || 'לא ידוע';
+    const statusesData = (Array.isArray(statusesQuery.data) ? statusesQuery.data : []) as any[];
+    const status = statusesData.find((s: any) => s.id === statusId);
+    return status?.name || 'לא ידוע';
   };
 
   const getStatusColor = (statusId: number): 'default' | 'primary' | 'success' | 'error' | 'warning' => {
@@ -210,19 +208,19 @@ export const GetTicketById: React.FC<{ id: number }> = ({ id }) => {
   };
 
   const getPriorityLabel = (priorityId: number): string => {
-    const priorities: { [key: number]: string } = {
-      1: 'גבוהה',
-      2: 'בינונית',
-      3: 'נמוכה',
-    };
-    return priorities[priorityId] || 'לא ידוע';
+    const prioritiesData = (Array.isArray(prioritiesQuery.data) ? prioritiesQuery.data : []) as any[];
+    const priority = prioritiesData.find((p: any) => p.id === priorityId);
+    return priority?.name || 'לא ידוע';
   };
 
   const getPriorityColor = (priorityId: number): 'error' | 'warning' | 'info' | 'success' => {
-    if (priorityId === 1) return 'error';
-    if (priorityId === 2) return 'warning';
-    if (priorityId === 3) return 'info';
-    return 'success';
+    const prioritiesData = (Array.isArray(prioritiesQuery.data) ? prioritiesQuery.data : []) as any[];
+    const priorityIndex = prioritiesData.findIndex((p: any) => p.id === priorityId);
+    
+    if (priorityIndex === 0) return 'error';      // First priority = highest (red)
+    if (priorityIndex === 1) return 'warning';    // Middle priority (orange)
+    if (priorityIndex === 2) return 'info';       // Lower priority (blue)
+    return 'success';                              // Default (green)
   };
 
   return (
