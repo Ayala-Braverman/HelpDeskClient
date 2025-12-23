@@ -21,7 +21,7 @@ import RegisterForm from "../services/Login/register";
 
 import { CreateUser } from "../services/users/usersFunctions";
 import { ShowUsers, GetUserByIdWarpper } from "../Components/UsersComponents";
-import { AddStatusOrPriorityForm } from "../services/Status_priority_comments/StatusOrPriority";
+import { AddStatusOrPriorityForm } from "../services/Status_priority/StatusOrPriority";
 import { Error404 } from "../pages/Page404";
 
 import {

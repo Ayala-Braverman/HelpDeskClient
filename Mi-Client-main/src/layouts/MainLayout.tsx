@@ -1,16 +1,13 @@
-import { Outlet } from "react-router-dom";
-import { Header } from "../pages/Heade_Footer/Header";
-import  Footer  from "../pages/Heade_Footer/Footer";
+import { Outlet} from "react-router-dom";
+import AppShell from "./AppShell";
 
 const MainLayout = () => {
+  
+
   return (
-    <>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-    </>
+    <AppShell>
+      <Outlet />
+    </AppShell>
   );
 };
 

@@ -5,6 +5,8 @@ import {  type UserToCreate } from "../../types/user";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { USERS_QUERY_KEY} from "../../Query/useQuery";
+import { Container, Box, Card, CardHeader, CardContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 export const getAllUsers = async () => {
@@ -34,6 +36,7 @@ export const getAllUsers = async () => {
 export const CreateUser: React.FC = () => {
     const token = localStorage.getItem("token");
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -53,72 +56,102 @@ export const CreateUser: React.FC = () => {
             console.log("Creating user successful");
             Swal.fire({
                 icon: "success",
-                title: "User Created!",
+                title: "בהצלחה!",
                 text: "המשתמש נוצר בהצלחה.",
+            }).then(() => {
+                queryClient.invalidateQueries({ queryKey: USERS_QUERY_KEY });
+                navigate("/users");
             });
-            queryClient.invalidateQueries({ queryKey: USERS_QUERY_KEY });
         }
         catch (error) {
             console.error("Creating user failed", error);
             Swal.fire({
                 icon: "error",
-                title: "Oops...",
+                title: "שגיאה",
                 text: error instanceof Error ? error.message : "יצירת המשתמש נכשלה! אנא נסה שוב.",
             });
         }
     }
     return (
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <h3>משתמש חדש</h3>
-            <div>
-                <label>שם מלא</label>
-                <input
-                    type="text"
-                    {...register("name", {
-                        required: "חובה להזין שם מלא"
-                    })} />
-                {errors.name && <small>{errors.name.message}</small>}
-            </div>
-            <div>
-                <label>אימייל</label>
-                <input
-                    type="email"
-                    {...register("email", {
-                        required: "חובה להזין אימייל",
-                        pattern: {
-                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                            message: "אימייל לא תקין"
-                        }
-                    })} />
-                {errors.email && <small>{errors.email.message}</small>}
-            </div>
-            <div>
-                <label>סיסמה</label>
-                <input
-                    type="password"
-                    {...register("password", {
-                        required: "חובה להזין סיסמה",
-                        minLength: {
-                            value: 6, message: "הסיסמה חייבת להכיל לפחות 6 תווים"
-                        }
-                    })} />
-                {errors.password && <small>{errors.password.message}</small>}
-            </div>
-            <div>
-                <label>תפקיד</label>
-                <select {...register("role", { required: "חובה לבחור תפקיד" })} defaultValue="">
-                    <option value="" disabled>בחר תפקיד</option>
-                    <option value="admin">מנהל</option>
-                    <option value="agent">מזכיר</option>
-                    <option value="customer">משתמש</option>
-                </select>
-
-                {errors.role && <small>{errors.role.message}</small>}
-            </div>
-            <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "יוצר משתמש..." : "צור משתמש"}
-            </button>
-        </form>
+        <Container maxWidth="md">
+            <Box sx={{ py: 3 }}>
+                <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, borderColor: '#e2e8f0', color: '#1e293b' }}>
+                    ← חזור
+                </Button>
+                <Card sx={{ border: '1px solid #e2e8f0' }}>
+                    <CardHeader title={<Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b' }}>משתמש חדש</Typography>} />
+                    <CardContent sx={{ p: 3 }}>
+                        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                            <Stack spacing={3}>
+                                <TextField
+                                    fullWidth
+                                    label="שם מלא"
+                                    placeholder="הזן שם מלא"
+                                    {...register("name", { required: "חובה להזין שם מלא" })}
+                                    error={!!errors.name}
+                                    helperText={errors.name?.message}
+                                    disabled={isSubmitting}
+                                />
+                                <TextField
+                                    fullWidth
+                                    type="email"
+                                    label="אימייל"
+                                    placeholder="example@domain.com"
+                                    {...register("email", {
+                                        required: "חובה להזין אימייל",
+                                        pattern: {
+                                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                            message: "אימייל לא תקין"
+                                        }
+                                    })}
+                                    error={!!errors.email}
+                                    helperText={errors.email?.message}
+                                    disabled={isSubmitting}
+                                />
+                                <TextField
+                                    fullWidth
+                                    type="password"
+                                    label="סיסמה"
+                                    placeholder="הזן סיסמה (לפחות 6 תווים)"
+                                    {...register("password", {
+                                        required: "חובה להזין סיסמה",
+                                        minLength: {
+                                            value: 6,
+                                            message: "הסיסמה חייבת להכיל לפחות 6 תווים"
+                                        }
+                                    })}
+                                    error={!!errors.password}
+                                    helperText={errors.password?.message}
+                                    disabled={isSubmitting}
+                                />
+                                <FormControl fullWidth error={!!errors.role}>
+                                    <InputLabel>תפקיד</InputLabel>
+                                    <Select
+                                        label="תפקיד"
+                                        {...register("role", { required: "חובה לבחור תפקיד" })}
+                                        defaultValue=""
+                                        disabled={isSubmitting}
+                                    >
+                                        <MenuItem value="admin">מנהל</MenuItem>
+                                        <MenuItem value="agent">מזכיר</MenuItem>
+                                        <MenuItem value="customer">משתמש</MenuItem>
+                                    </Select>
+                                    {errors.role && <Typography variant="caption" sx={{ color: '#d32f2f', display: 'block', mt: 0.5 }}>{errors.role.message}</Typography>}
+                                </FormControl>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    disabled={isSubmitting}
+                                    sx={{ mt: 1, bgcolor: '#2563eb', '&:hover': { bgcolor: '#1e40af' } }}
+                                >
+                                    {isSubmitting ? "יוצר משתמש..." : "צור משתמש"}
+                                </Button>
+                            </Stack>
+                        </form>
+                    </CardContent>
+                </Card>
+            </Box>
+        </Container>
     );
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { usePriorityQuery, useStatusQuery } from "../../Query/useQuery";
+import { usePriorityQuery, useStatusQuery } from "../Query/useQuery";
 
 type Props = { type: "priorities" | "statuses" };
 type Item = { id: number; name: string };

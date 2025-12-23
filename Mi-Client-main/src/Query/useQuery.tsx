@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "../services/users/usersFunctions";
 import { getComments } from "../services/Comments/commentsFunctions";
-import { GetPriorityOrStatus } from "../services/Status_priority_comments/StatusOrPriority";
+import { GetPriorityOrStatus } from "../services/Status_priority/StatusOrPriority";
 import loadTickets from "../services/Tickets/TicketFunctions";
 export const USERS_QUERY_KEY = ["users"];
 export const COMMENTS_QUERY_KEY = ["comments"];

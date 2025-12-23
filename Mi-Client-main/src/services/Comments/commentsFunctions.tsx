@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { COMMENTS_QUERY_KEY } from "../../Query/useQuery";
 import { useQueryClient } from "@tanstack/react-query";
+import { Box, TextField, IconButton, InputAdornment } from "@mui/material";
+import { Send as SendIcon } from "@mui/icons-material";
 
 
 export const getComments = async (ticketId: number) => {
@@ -40,6 +42,7 @@ export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
+        reset,
     } = useForm<Comment>();
     const onSubmit = async (data: Comment) => {
         try {
@@ -57,36 +60,77 @@ export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
             console.log("Adding comment successful:");
             Swal.fire({
                 icon: "success",
-                title: "Comment Added!",
+                title: "בהצלחה!",
                 text: "התגובה נוספה בהצלחה.",
             });
-            window.location.reload();
+            reset();
         }
         catch (error) {
             console.error("Adding comment failed", error);
             Swal.fire({
                 icon: "error",
-                title: "Oops...",
+                title: "שגיאה",
                 text: error instanceof Error ? error.message : "הוספת התגובה נכשלה! אנא נסה שוב.",
             });
         }
     }
     return (
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div>
-                <label>תגובה</label>
-                <input
-                    type="text"
-                    {...register("content", {
-                        required: "חובה להזין תוכן תגובה"
-                    })} />
-                {errors.content && <small>{errors.content.message}</small>}
-            </div>
-            <button type="submit" disabled={isSubmitting}>
-                שלח תגובה
-            </button>
-        </form>
+        <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{
+                display: 'flex',
+                gap: 1,
+                alignItems: 'flex-end',
+                p: 2,
+                backgroundColor: '#ffffff',
+                borderTop: '1px solid #e2e8f0',
+                borderRadius: '0 0 8px 8px',
+                mt: 2,
+            }}
+        >
+            <TextField
+                fullWidth
+                placeholder="כתוב הערה..."
+                {...register("content", { required: "חובה להזין תוכן תגובה" })}
+                error={!!errors.content}
+                helperText={errors.content?.message}
+                disabled={isSubmitting}
+                multiline
+                maxRows={4}
+                variant="outlined"
+                size="small"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '8px',
+                        backgroundColor: '#f9fafb',
+                        '&:hover': {
+                            backgroundColor: '#f3f4f6',
+                        },
+                    },
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                type="submit"
+                                disabled={isSubmitting}
+                                size="small"
+                                sx={{
+                                    color: '#2563eb',
+                                    '&:hover': {
+                                        backgroundColor: '#dbeafe',
+                                    },
+                                }}
+                            >
+                                <SendIcon fontSize="small" />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+        </Box>
     );
-
 }
 
