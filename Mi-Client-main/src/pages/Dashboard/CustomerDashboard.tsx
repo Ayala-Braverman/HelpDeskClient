@@ -12,25 +12,26 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material";
 import { DashboardCharts } from "../../Components/DashboardCharts";
+import { useUserContext } from "../../Context/userContext";
 
 const CustomerDashboard: React.FC = () => {
-  const user = localStorage.getItem("user");
-  const user1 = user ? JSON.parse(user) : null;
+  const { user } = useUserContext();
+  const user1 = user?.userDetails ;
   const navigate = useNavigate();
 
   const customerActions = [
     {
       id: 1,
-      label: "פנייה חדשה",
-      description: "צור פנייה חדשה לתמיכה",
+      label: "New Ticket",
+      description: "Create a new support ticket",
       icon: <AddIcon sx={{ fontSize: 40, color: "#2563eb" }} />,
       onClick: () => navigate("/ticket/new"),
       variant: "contained" as const,
     },
     {
       id: 2,
-      label: "הפניות שלי",
-      description: "צפה בכל הפניות שלך",
+      label: "My Tickets",
+      description: "View all your tickets",
       icon: <TicketsIcon sx={{ fontSize: 40, color: "#2563eb" }} />,
       onClick: () => navigate("/tickets"),
       variant: "outlined" as const,
@@ -39,34 +40,45 @@ const CustomerDashboard: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box sx={{ py: 4 }}>
-        {/* Welcome Card */}
-        <Card
-          sx={{
-            mb: 4,
-            background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
-            border: "1px solid #bae6fd",
-          }}
-        >
-          <CardContent sx={{ p: 3, textAlign: "center" }}>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e293b" }}>
-                {user1 ? `!ברוך הבא, ${user1.name}` : "!ברוך הבא"}
-              </Typography>
-              <Typography variant="body1" sx={{ color: "#64748b" }}>
-                אנחנו כאן כדי לעזור לך
+      <Box sx={{ py: 6 }}>
+        {/* Welcome Section */}
+        <Box sx={{ mb: 8, textAlign: 'center' }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, alignItems: 'center' }}>
+            {/* Main Title */}
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5, flexWrap: 'wrap' }}>
+              <Typography
+                sx={{ 
+                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                  fontWeight: 700,
+                  background: "linear-gradient(135deg, #2563eb 0%, #10b981 100%)",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                {user1 ? `Welcome, ${user1.name}` : "Welcome"}
               </Typography>
             </Box>
-          </CardContent>
-        </Card>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: "#64748b", 
+                fontWeight: 500
+              }}
+            >
+              Create a new ticket and get help within minutes.
+            </Typography>
+          </Box>
+        </Box>
 
         {/* Getting Started */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, color: "#1e293b" }}>
-            בואו נתחיל
+            Let's Get Started
           </Typography>
           <Typography variant="body2" sx={{ color: "#64748b", mb: 3 }}>
-            בחר את מה שתרצה לעשות היום
+            Choose what you'd like to do today
           </Typography>
         </Box>
 
@@ -121,13 +133,13 @@ const CustomerDashboard: React.FC = () => {
         <Card sx={{ border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>
           <CardContent sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#1e293b" }}>
-              💡 טיפים
+              💡 Tips
             </Typography>
             <Typography variant="body2" sx={{ color: "#64748b", lineHeight: 1.8 }}>
-              • אתה יכול לצפות בסטטוס של הפניות שלך בכל עת
+              • You can view the status of your tickets at any time
               <br />
-              • הצוות שלנו ישיב לך במהירות האפשרית
-              <br />• אתה תקבל עדכוניות דרך דוא״ל
+              • Our team will respond to you as quickly as possible
+              <br />• You will receive updates via email
             </Typography>
           </CardContent>
         </Card>

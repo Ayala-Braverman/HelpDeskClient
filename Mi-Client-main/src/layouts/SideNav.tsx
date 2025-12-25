@@ -18,6 +18,7 @@ import {
   AppRegistration as RegisterIcon,
 } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useUserContext } from '../Context/userContext'
 
 interface SideNavProps {
   collapsed?: boolean
@@ -26,48 +27,49 @@ interface SideNavProps {
 export const SideNav: React.FC<SideNavProps> = ({ collapsed = false }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const { user } = useUserContext();
+  const userDetails = user?.userDetails ;
 
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/')
   }
 
-  const isLoggedIn = !!user?.id
+  const isLoggedIn = !!userDetails?.id
 
   const getMenuItems = () => {
     if (!isLoggedIn) {
       return [
-        { label: 'התחברות', icon: LoginIcon, path: '/login', roles: ['all'] },
-        { label: 'הרשם', icon: RegisterIcon, path: '/register', roles: ['all'] },
+        { label: 'Login', icon: LoginIcon, path: '/login', roles: ['all'] },
+        { label: 'Register', icon: RegisterIcon, path: '/register', roles: ['all'] },
       ]
     }
 
     const baseItems = [
-      { label: 'דשבורד', icon: DashboardIcon, path: getDefaultDashboard(), roles: ['admin', 'agent', 'customer'] },
-      { label: 'פניות', icon: TicketsIcon, path: '/tickets', roles: ['admin', 'agent', 'customer'] },
+      { label: 'Dashboard', icon: DashboardIcon, path: getDefaultDashboard(), roles: ['admin', 'agent', 'customer'] },
+      { label: 'Tickets', icon: TicketsIcon, path: '/tickets', roles: ['admin', 'agent', 'customer'] },
     ]
 
     const roleSpecificItems: any[] = []
 
-    if (user?.role === 'admin') {
+    if (userDetails?.role === 'admin') {
       roleSpecificItems.push(
-        { label: 'משתמשים', icon: PeopleIcon, path: '/users', roles: ['admin'] },
-        { label: 'סטטוסים', icon: StatusIcon, path: '/manage/statuses', roles: ['admin'] },
-        { label: 'עדיפויות', icon: PriorityIcon, path: '/manage/priorities', roles: ['admin'] }
+        { label: 'Users', icon: PeopleIcon, path: '/users', roles: ['admin'] },
+        { label: 'Statuses', icon: StatusIcon, path: '/manage/statuses', roles: ['admin'] },
+        { label: 'Priorities', icon: PriorityIcon, path: '/manage/priorities', roles: ['admin'] }
       )
     }
 
     return [
       ...baseItems,
       ...roleSpecificItems,
-      { label: 'התנתקות', icon: LogoutIcon, path: '/logout', roles: ['admin', 'agent', 'customer'] },
+      { label: 'Logout', icon: LogoutIcon, path: '/logout', roles: ['admin', 'agent', 'customer'] },
     ]
   }
 
   const getDefaultDashboard = () => {
-    if (!user?.role) return '/customer/dashboard'
-    if (user.role === 'admin') return '/admin/dashboard'
-    if (user.role === 'agent') return '/agent/dashboard'
+    if (!userDetails?.role) return '/customer/dashboard'
+    if (userDetails.role === 'admin') return '/admin/dashboard'
+    if (userDetails.role === 'agent') return '/agent/dashboard'
     return '/customer/dashboard'
   }
 
@@ -117,7 +119,7 @@ export const SideNav: React.FC<SideNavProps> = ({ collapsed = false }) => {
       </Box>
 
       {/* Navigation Menu */}
-      <List sx={{ flex: 1, p: 1, overflow: 'auto' }}>
+      <List sx={{ flex: 1, p: 1, overflow: 'auto', scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}>
         {menuItems.map((item, index) => {
           const IconComponent = item.icon
           const active = isActive(item.path)

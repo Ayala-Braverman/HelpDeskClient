@@ -1,1 +1,0 @@
-// This file has been removed - all pages now use AppShell layout for consistency

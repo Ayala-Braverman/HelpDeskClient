@@ -19,6 +19,7 @@ import {
 } from '@mui/icons-material'
 import SideNav from './SideNav'
 import { useNavigate } from 'react-router-dom'
+import { useUserContext } from '../Context/userContext'
 
 interface AppShellProps {
   children: React.ReactNode
@@ -50,7 +51,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     navigate('/login')
   }
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const { user } = useUserContext();
+  const userDetails = user?.userDetails ;
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f9fafb' }}>
@@ -105,14 +107,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                   fontSize: '0.875rem',
                 }}
               >
-                {user?.username?.charAt(0).toUpperCase() || 'U'}
+                {userDetails?.name?.charAt(0).toUpperCase() || 'U'}
               </Avatar>
               <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <p style={{ margin: 0, fontSize: '0.875rem', color: '#111827', fontWeight: 500 }}>
-                  {user?.username || 'User'}
+                  {userDetails?.name || 'User'}
                 </p>
                 <p style={{ margin: 0, fontSize: '0.75rem', color: '#6b7280' }}>
-                  {user?.role || 'User'}
+                  {userDetails?.role || 'User'}
                 </p>
               </Box>
             </Box>
@@ -125,7 +127,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
               <MenuItem disabled>
-                <strong>{user?.username || 'User'}</strong>
+                <strong>{userDetails?.name || 'User'}</strong>
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleProfileMenuClose}>

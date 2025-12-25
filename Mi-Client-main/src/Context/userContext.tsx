@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { type UserDetails } from "../types/user";
+
 interface User {
   token: string,
   userDetails: UserDetails
@@ -7,13 +8,16 @@ interface User {
 
 type Action =
   | { type: "LOGIN"; payload: User }
+  | { type: "REFRESH"; payload: User }
   | { type: "LOGOUT" };
 
 function userReducer(state: User | null, action: Action): User | null {
   switch (action.type) {
     case "LOGIN":
+    case "REFRESH":
       return action.payload;
     case "LOGOUT":
+      localStorage.removeItem("user");
       return null;
     default:
       return state;
@@ -27,8 +31,18 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+const getInitialUser = (): User | null => {
+  const savedUser = localStorage.getItem("user");
+  if (!savedUser) return null;
+  try {
+    return JSON.parse(savedUser);
+  } catch (error) {
+    return null;
+  }
+};
+
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, dispatch] = useReducer(userReducer, null);
+  const [user, dispatch] = useReducer(userReducer, getInitialUser());
 
   return (
     <UserContext.Provider value={{ user, dispatch }}>

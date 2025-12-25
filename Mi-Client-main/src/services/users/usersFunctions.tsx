@@ -5,12 +5,12 @@ import {  type UserToCreate } from "../../types/user";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { USERS_QUERY_KEY} from "../../Query/useQuery";
-import { Container, Box, Card, CardHeader, CardContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Typography } from "@mui/material";
+import { Container, Box, Card, CardContent, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Typography, FormHelperText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../Context/userContext";
 
 
-export const getAllUsers = async () => {
-    const token = localStorage.getItem("token");
+export const getAllUsers = async (token?: string) => {
     try {
         const res = await axios.get(
             import.meta.env.VITE_API_URL + "/users",
@@ -34,7 +34,8 @@ export const getAllUsers = async () => {
 }
 
 export const CreateUser: React.FC = () => {
-    const token = localStorage.getItem("token");
+    const { user } = useUserContext();
+    const token = user?.token;
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const {
@@ -74,15 +75,26 @@ export const CreateUser: React.FC = () => {
     }
     return (
         <Container maxWidth="md">
-            <Box sx={{ py: 3 }}>
-                <Button variant="outlined" onClick={() => navigate(-1)} sx={{ mb: 2, borderColor: '#e2e8f0', color: '#1e293b' }}>
+            <Box sx={{ py: 4 }}>
+                <Button 
+                    variant="outlined" 
+                    onClick={() => navigate(-1)} 
+                    sx={{ mb: 3, borderColor: '#10b981', color: '#10b981', fontWeight: 600, '&:hover': { backgroundColor: '#f0fdf4', borderColor: '#10b981' } }}
+                >
                     ← חזור
                 </Button>
-                <Card sx={{ border: '1px solid #e2e8f0' }}>
-                    <CardHeader title={<Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b' }}>משתמש חדש</Typography>} />
-                    <CardContent sx={{ p: 3 }}>
+                <Card sx={{ border: '2px solid #a7f3d0', boxShadow: '0 4px 20px rgba(16, 185, 129, 0.1)' }}>
+                    <Box sx={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%)', p: 3, borderBottom: '2px solid #a7f3d0' }}>
+                        <Typography variant="h4" sx={{ fontWeight: 700, color: '#047857', letterSpacing: '-0.5px' }}>
+                            משתמש חדש
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#6b7280', mt: 0.5 }}>
+                            הוסף משתמש חדש למערכת
+                        </Typography>
+                    </Box>
+                    <CardContent sx={{ p: 4 }}>
                         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                            <Stack spacing={3}>
+                            <Stack spacing={2.5}>
                                 <TextField
                                     fullWidth
                                     label="שם מלא"
@@ -91,6 +103,13 @@ export const CreateUser: React.FC = () => {
                                     error={!!errors.name}
                                     helperText={errors.name?.message}
                                     disabled={isSubmitting}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover fieldset': { borderColor: '#10b981' },
+                                            '&.Mui-focused fieldset': { borderColor: '#10b981', boxShadow: '0 0 0 3px rgba(16, 185, 129, 0.1)' },
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#10b981' },
+                                    }}
                                 />
                                 <TextField
                                     fullWidth
@@ -107,6 +126,13 @@ export const CreateUser: React.FC = () => {
                                     error={!!errors.email}
                                     helperText={errors.email?.message}
                                     disabled={isSubmitting}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover fieldset': { borderColor: '#10b981' },
+                                            '&.Mui-focused fieldset': { borderColor: '#10b981', boxShadow: '0 0 0 3px rgba(16, 185, 129, 0.1)' },
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#10b981' },
+                                    }}
                                 />
                                 <TextField
                                     fullWidth
@@ -123,26 +149,46 @@ export const CreateUser: React.FC = () => {
                                     error={!!errors.password}
                                     helperText={errors.password?.message}
                                     disabled={isSubmitting}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            '&:hover fieldset': { borderColor: '#10b981' },
+                                            '&.Mui-focused fieldset': { borderColor: '#10b981', boxShadow: '0 0 0 3px rgba(16, 185, 129, 0.1)' },
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#10b981' },
+                                    }}
                                 />
                                 <FormControl fullWidth error={!!errors.role}>
-                                    <InputLabel>תפקיד</InputLabel>
+                                    <InputLabel sx={{ '&.Mui-focused': { color: '#10b981' } }}>תפקיד</InputLabel>
                                     <Select
                                         label="תפקיד"
                                         {...register("role", { required: "חובה לבחור תפקיד" })}
                                         defaultValue=""
                                         disabled={isSubmitting}
+                                        sx={{
+                                            '&.Mui-focused fieldset': { borderColor: '#10b981', boxShadow: '0 0 0 3px rgba(16, 185, 129, 0.1)' },
+                                        }}
                                     >
                                         <MenuItem value="admin">מנהל</MenuItem>
-                                        <MenuItem value="agent">מזכיר</MenuItem>
-                                        <MenuItem value="customer">משתמש</MenuItem>
+                                        <MenuItem value="agent">סוכן תמיכה</MenuItem>
+                                        <MenuItem value="customer">לקוח</MenuItem>
                                     </Select>
-                                    {errors.role && <Typography variant="caption" sx={{ color: '#d32f2f', display: 'block', mt: 0.5 }}>{errors.role.message}</Typography>}
+                                    {errors.role && <FormHelperText>{errors.role.message}</FormHelperText>}
                                 </FormControl>
                                 <Button
                                     type="submit"
                                     variant="contained"
                                     disabled={isSubmitting}
-                                    sx={{ mt: 1, bgcolor: '#2563eb', '&:hover': { bgcolor: '#1e40af' } }}
+                                    sx={{ 
+                                        mt: 2, 
+                                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                        fontWeight: 700,
+                                        py: 1.5,
+                                        boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                                        '&:hover': { 
+                                            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                                            boxShadow: '0 6px 16px rgba(16, 185, 129, 0.4)',
+                                        },
+                                    }}
                                 >
                                     {isSubmitting ? "יוצר משתמש..." : "צור משתמש"}
                                 </Button>

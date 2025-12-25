@@ -9,7 +9,7 @@ type Item = { id: number; name: string };
 export const ShowPriorityOrStatusWrapper: React.FC = () => {
    const { type } = useParams();
    if (type !== "priorities" && type !== "statuses") {
-     return <div>Invalid type</div>;
+     return <div>Invalid Type</div>;
    }
    return <ShowPriorityOrStatus type={type} />;
 }
@@ -29,16 +29,16 @@ export const ShowPriorityOrStatus: React.FC<Props> = ({ type }) => {
         text:
           q.error instanceof Error
             ? q.error.message
-            : `טעינת ה${type} נכשלה! אנא נסה שוב.`,
+            : `Failed to load ${type}! Please try again.`,
       });
     }
   }, [q.error, type]);
 
-  if (q.isLoading) return <div>טוען...</div>;
+  if (q.isLoading) return <div>Loading...</div>;
 
   return (
     <div>
-      <h2>רשימת ה{type === "priorities" ? "עדיפויות" : "סטטוסים"}:</h2>
+      <h2>List of {type === "priorities" ? "Priorities" : "Statuses"}:</h2>
       <ul>
         {items.map((item) => (
           <li key={item.id}>{item.name}</li>

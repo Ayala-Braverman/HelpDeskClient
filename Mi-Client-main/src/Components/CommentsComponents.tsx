@@ -11,21 +11,23 @@ import {
   CardContent,
   Stack,
 } from "@mui/material";
+import { useUserContext } from "../Context/userContext";
 
 export const ShowComments: React.FC<{ id: number }> = ({ id }) => {
   const comments = useCommentsQuery(id);
   const items = comments.data || [];
-  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const {user} = useUserContext();
+  const currentUser = user?.userDetails;
 
   React.useEffect(() => {
     if (comments.error) {
       Swal.fire({
         icon: "error",
-        title: "שגיאה",
+        title: "Error",
         text:
           comments.error instanceof Error
             ? comments.error.message
-            : "טעינת הערות נכשלה",
+            : "Failed to load comments",
       });
     }
   }, [comments.error]);
@@ -43,7 +45,7 @@ export const ShowComments: React.FC<{ id: number }> = ({ id }) => {
       <Card sx={{ border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>
         <CardContent sx={{ textAlign: "center", py: 3 }}>
           <Typography variant="body2" sx={{ color: "#64748b" }}>
-            אין הערות עדיין
+            No comments yet
           </Typography>
         </CardContent>
       </Card>
@@ -94,7 +96,7 @@ export const ShowComments: React.FC<{ id: number }> = ({ id }) => {
                       variant="body2"
                       sx={{ fontWeight: 700, color: '#1e293b' }}
                     >
-                      {comment.author_name || 'משתמש'}
+                      {comment.author_name || 'User'}
                     </Typography>
                   </>
                 )}

@@ -32,6 +32,7 @@ import {
   Save as SaveIcon,
   ArrowBack as BackIcon,
 } from '@mui/icons-material';
+import { useUserContext } from '../../Context/userContext';
 
 type statusOrPriority = {
     id: number;
@@ -41,7 +42,8 @@ type statusOrPriority = {
 export const CreateTicket: React.FC = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
+    const { user } = useUserContext();
+    const token = user?.token;
     const statuses = useStatusQuery();
     const priorities = usePriorityQuery();
     const statusArray = statuses.data as statusOrPriority[];
@@ -84,23 +86,23 @@ export const CreateTicket: React.FC = () => {
     
     return (
         <Container maxWidth="md">
-            <Box sx={{ py: 3 }}>
-                <Button startIcon={<BackIcon />} onClick={() => navigate(-1)} sx={{ mb: 2, color: '#2563eb' }}>
+            <Box sx={{ py: 4 }}>
+                <Button startIcon={<BackIcon />} onClick={() => navigate(-1)} sx={{ mb: 3, color: '#2563eb', fontWeight: 600, '&:hover': { backgroundColor: '#f0f4ff' } }}>
                     חזור
                 </Button>
 
-                <Card sx={{ border: '1px solid #e2e8f0' }}>
-                    <CardHeader
-                        title={
-                            <Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b' }}>
-                                פנייה חדשה
-                            </Typography>
-                        }
-                    />
-                    <Divider />
-                    <CardContent sx={{ p: 3 }}>
+                <Card sx={{ border: '2px solid #bae6fd', boxShadow: '0 4px 20px rgba(37, 99, 235, 0.1)' }}>
+                    <Box sx={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)', p: 3, borderBottom: '2px solid #bae6fd' }}>
+                        <Typography variant="h4" sx={{ fontWeight: 900, color: '#1e40af', letterSpacing: '-0.5px' }}>
+                            פנייה חדשה
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#6b7280', mt: 0.5 }}>
+                            ספר לנו על הבעיה שלך ואנחנו נעזור לך
+                        </Typography>
+                    </Box>
+                    <CardContent sx={{ p: 4 }}>
                         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                            <Stack spacing={3}>
+                            <Stack spacing={2.5}>
                                 <TextField
                                     fullWidth
                                     label="נושא"
@@ -108,8 +110,12 @@ export const CreateTicket: React.FC = () => {
                                     {...register("subject", { required: "חובה להזין נושא" })}
                                     error={!!errors.subject}
                                     helperText={errors.subject?.message}
-                                    variant="outlined"
                                     disabled={isSubmitting}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root:hover fieldset': { borderColor: '#2563eb' },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: '#2563eb', boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)' },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#2563eb' },
+                                    }}
                                 />
 
                                 <TextField
@@ -121,16 +127,24 @@ export const CreateTicket: React.FC = () => {
                                     {...register("description", { required: "חובה להזין תיאור" })}
                                     error={!!errors.description}
                                     helperText={errors.description?.message}
-                                    variant="outlined"
                                     disabled={isSubmitting}
+                                    sx={{
+                                        '& .MuiOutlinedInput-root:hover fieldset': { borderColor: '#2563eb' },
+                                        '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: '#2563eb', boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)' },
+                                        '& .MuiInputLabel-root.Mui-focused': { color: '#2563eb' },
+                                    }}
                                 />
 
                                 <FormControl fullWidth error={!!errors.priority_id}>
-                                    <InputLabel>עדיפות</InputLabel>
+                                    <InputLabel sx={{ '&.Mui-focused': { color: '#2563eb' } }}>עדיפות</InputLabel>
                                     <Select
                                         label="עדיפות"
                                         {...register("priority_id", { required: "חובה לבחור עדיפות" })}
                                         disabled={isSubmitting}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root:hover fieldset': { borderColor: '#2563eb' },
+                                            '& .MuiOutlinedInput-root.Mui-focused fieldset': { borderColor: '#2563eb', boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.1)' },
+                                        }}
                                     >
                                         <MenuItem value="">
                                             <em>בחר עדיפות</em>
@@ -151,14 +165,19 @@ export const CreateTicket: React.FC = () => {
                                     variant="contained"
                                     startIcon={isSubmitting ? <CircularProgress size={20} /> : <SaveIcon />}
                                     disabled={isSubmitting}
-                                    sx={{
-                                        backgroundColor: '#2563eb',
-                                        '&:hover': { backgroundColor: '#1e40af' },
-                                        py: 1.5,
-                                    }}
                                     fullWidth
+                                    sx={{
+                                        background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+                                        fontWeight: 700,
+                                        py: 1.5,
+                                        boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
+                                        '&:hover': { 
+                                            background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+                                            boxShadow: '0 6px 16px rgba(37, 99, 235, 0.4)',
+                                        },
+                                    }}
                                 >
-                                    {isSubmitting ? 'יוצר פנייה...' : 'יצירת פנייה'}
+                                    {isSubmitting ? 'יוצר פנייה...' : 'צור פנייה'}
                                 </Button>
                             </Stack>
                         </form>
@@ -171,8 +190,7 @@ export const CreateTicket: React.FC = () => {
 
 
 
-export const loadTickets = async () => {
-    const token = localStorage.getItem("token");
+export const loadTickets = async (token?: string) => {
     try {
         const userRes = await axios.get(
             import.meta.env.VITE_API_URL + "/tickets",
@@ -225,7 +243,8 @@ export const UpdateTicketWrapper: React.FC = () => {
 export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id: number, assigned_to: number, subject: string, description: string }> = ({ id, status_id, priority_id, assigned_to, subject }) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
+    const { user } = useUserContext();
+    const token = user?.token;
     const statuses = useStatusQuery();
     const priorities = usePriorityQuery();
     const users = useUsersQuery();
@@ -382,7 +401,8 @@ export const DeleteTicketWrapper: React.FC = () => {
 
 export const DeleteTicket: React.FC<{ id: number }> = ({ id }) => {
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
+    const { user } = useUserContext();
+    const token = user?.token;
     
     const handleDelete = async () => {
         try {
@@ -437,8 +457,7 @@ export const DeleteTicket: React.FC<{ id: number }> = ({ id }) => {
     );
 }
 
-export const getTicketById = async (id: number): Promise<TicketById | undefined> => {
-    const token = localStorage.getItem("token");
+export const getTicketById = async (id: number, token?: string): Promise<TicketById | undefined> => {
     try {
         const res = await axios.get(
             import.meta.env.VITE_API_URL + "/tickets/" + id,

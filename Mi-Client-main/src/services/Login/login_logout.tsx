@@ -27,15 +27,15 @@ const LoginForm: React.FC = () => {
         import.meta.env.VITE_API_URL + "/auth/login",
         data
       );
-      console.log("Login successful:");
       Swal.fire({
         icon: "success",
         title: "בהצלחה!",
         text: "התחברת בהצלחה.",
       });
-      userDispatch({ type: "LOGIN", payload: res.data });
+      const payload = { token: res.data.token, userDetails: res.data.user };
+      userDispatch({ type: "LOGIN", payload });
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("user", JSON.stringify(payload));
       if (res.data.user.role === "admin") {
         navigate("/admin/dashboard");
       } else if (res.data.user.role === "agent") {

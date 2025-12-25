@@ -11,17 +11,18 @@ import {
   Description as TicketsIcon,
 } from "@mui/icons-material";
 import { DashboardCharts } from "../../Components/DashboardCharts";
+import { useUserContext } from "../../Context/userContext";
 
 const AgentDashboard: React.FC = () => {
-  const user = localStorage.getItem("user");
-  const user1 = user ? JSON.parse(user) : null;
+  const { user } = useUserContext();
+  const user1 = user?.userDetails ;
   const navigate = useNavigate();
 
   const agentActions = [
     {
       id: 1,
-      label: "הפניות שלי",
-      description: "צפה בפניות המשויכות אליך",
+      label: "My Tickets",
+      description: "View tickets assigned to you",
       icon: <TicketsIcon sx={{ fontSize: 40, color: "#2563eb" }} />,
       onClick: () => navigate("/tickets"),
     },
@@ -29,34 +30,46 @@ const AgentDashboard: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box sx={{ py: 4 }}>
-        {/* Welcome Card */}
-        <Card
-          sx={{
-            mb: 4,
-            background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)",
-            border: "1px solid #bae6fd",
-          }}
-        >
-          <CardContent sx={{ p: 3, textAlign: "center" }}>
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, color: "#1e293b" }}>
-                {user1 ? `!ברוך הבא, ${user1.name}` : "!ברוך הבא, סוכן"}
-              </Typography>
-              <Typography variant="body1" sx={{ color: "#64748b" }}>
-                תפקידך: {user1?.role === "agent" ? "סוכן תמיכה" : "משתמש"}
+      <Box sx={{ py: 6 }}>
+        {/* Welcome Section */}
+        <Box sx={{ mb: 8, textAlign: 'center' }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, alignItems: 'center' }}>
+            {/* Main Title */}
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0.5, flexWrap: 'wrap' }}>
+              <Typography 
+                sx={{ 
+                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                  fontWeight: 700,
+                  background: "linear-gradient(135deg, #2563eb 0%, #10b981 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                {user1 ? `Welcome, ${user1.name}` : "Welcome, Agent"}
               </Typography>
             </Box>
-          </CardContent>
-        </Card>
+            <Typography 
+              variant="body1" 
+              sx={{ 
+                color: "#64748b", 
+                fontWeight: 500
+              }}
+            >
+              Handle your tickets smartly and quickly. Every ticket is an opportunity to support with priority.
+            </Typography>
+          </Box>
+        </Box>
 
         {/* Your Tasks */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5, color: "#1e293b" }}>
-            המשימות שלך
+            Your Tasks
           </Typography>
           <Typography variant="body2" sx={{ color: "#64748b", mb: 3 }}>
-            בדוק את הפניות המשויכות אליך וטפל בהן
+            Check tickets assigned to you and handle them
           </Typography>
         </Box>
 
@@ -111,14 +124,14 @@ const AgentDashboard: React.FC = () => {
         <Card sx={{ mt: 4, border: "1px solid #e2e8f0", backgroundColor: "#f8fafc" }}>
           <CardContent sx={{ p: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#1e293b" }}>
-              📋 עזרה
+              📋 Help
             </Typography>
             <Typography variant="body2" sx={{ color: "#64748b", lineHeight: 1.8 }}>
-              • עדכנו כל פנייה עם אחרון הידע
+              • Update each ticket with the latest knowledge
               <br />
-              • התאמ סטטוס של הפנייה בעת טיפול בה
+              • Change the status of the ticket as you handle it
               <br />
-              • הוסיפו הערות כדי לעדכן את הלקוח
+              • Add comments to update the customer
             </Typography>
           </CardContent>
         </Card>

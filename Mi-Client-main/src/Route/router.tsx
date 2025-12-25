@@ -4,6 +4,7 @@ import MainLayout from "../layouts/MainLayout";
 import CustomerDashboard from "../pages/Dashboard/CustomerDashboard";
 import AgentDashboard from "../pages/Dashboard/AgentDashboard";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
+import RouterHomePage from "./routerHomePage";
 
 import {
     CreateTicket,
@@ -32,9 +33,9 @@ import {
     ProtectedAdminOrAgentRoute
 } from "./ProtectedRoute";
 
-import RouterHomePage from "./routerHomePage";
 import { ShowPriorityOrStatusWrapper } from "../Components/showStatusOrPriority";
 import { ManagePrioritiesAndStatusesWrapper } from "../Components/ManagePrioritiesAndStatuses";
+
 
 export const router = createBrowserRouter([
     {
@@ -67,12 +68,12 @@ export const router = createBrowserRouter([
                 path: "/*",
                 element: <Navigate to="/404" replace />
             },
-        
-
+            
             {
                 path: "/",
-                element: <RouterHomePage />
+                element: <RouterHomePage />,
             },
+
 
             // ===== customer =====
             {

@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
@@ -6,10 +5,10 @@ import { COMMENTS_QUERY_KEY } from "../../Query/useQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { Box, TextField, IconButton, InputAdornment } from "@mui/material";
 import { Send as SendIcon } from "@mui/icons-material";
+import { useUserContext } from "../../Context/userContext";
 
 
-export const getComments = async (ticketId: number) => {
-    const token = localStorage.getItem("token");
+export const getComments = async (ticketId: number, token: string) => {
     try {
         const res = await axios.get(
             import.meta.env.VITE_API_URL + `/tickets/${ticketId}/comments`,
@@ -19,8 +18,9 @@ export const getComments = async (ticketId: number) => {
                 },
             }
         );
-        console.log("Comments loaded successfully:");
+        console.log("Comments loaded successfully:",res.data);
         return res.data;
+
     }
     catch (error) {
         console.error("Loading comments failed", error);
@@ -32,9 +32,10 @@ export const getComments = async (ticketId: number) => {
     }
 }
 
-export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
+export const AddComment= ({ ticketId }: { ticketId: number }) => {
     const queryClient = useQueryClient();
-    const token = localStorage.getItem("token");
+    const { user } = useUserContext();
+    const token = user?.token ;
     type Comment = {
         content: string;
     }
@@ -42,7 +43,6 @@ export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-        reset,
     } = useForm<Comment>();
     const onSubmit = async (data: Comment) => {
         try {
@@ -55,15 +55,8 @@ export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
                     },
                 }
             );
-
-            queryClient.invalidateQueries({ queryKey: COMMENTS_QUERY_KEY });
+            queryClient.invalidateQueries({ queryKey: [COMMENTS_QUERY_KEY, ticketId] });
             console.log("Adding comment successful:");
-            Swal.fire({
-                icon: "success",
-                title: "בהצלחה!",
-                text: "התגובה נוספה בהצלחה.",
-            });
-            reset();
         }
         catch (error) {
             console.error("Adding comment failed", error);
@@ -99,15 +92,11 @@ export const AddComment: React.FC<{ ticketId: number }> = ({ ticketId }) => {
                 disabled={isSubmitting}
                 multiline
                 maxRows={4}
-                variant="outlined"
                 size="small"
                 sx={{
                     '& .MuiOutlinedInput-root': {
-                        borderRadius: '8px',
                         backgroundColor: '#f9fafb',
-                        '&:hover': {
-                            backgroundColor: '#f3f4f6',
-                        },
+                        '&:hover': { backgroundColor: '#f3f4f6' },
                     },
                 }}
                 InputProps={{
