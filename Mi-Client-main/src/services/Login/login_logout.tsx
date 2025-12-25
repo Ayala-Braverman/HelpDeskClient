@@ -27,11 +27,6 @@ const LoginForm: React.FC = () => {
         import.meta.env.VITE_API_URL + "/auth/login",
         data
       );
-      Swal.fire({
-        icon: "success",
-        title: "בהצלחה!",
-        text: "התחברת בהצלחה.",
-      });
       const payload = { token: res.data.token, userDetails: res.data.user };
       userDispatch({ type: "LOGIN", payload });
       localStorage.setItem("token", res.data.token);
@@ -146,11 +141,6 @@ export const Logout: React.FC = () => {
     userDispatch({ type: "LOGOUT" });
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    Swal.fire({
-      icon: "success",
-      title: "בהצלחה!",
-      text: "התנתקת בהצלחה.",
-    });
     navigate("/login");
   };
 
