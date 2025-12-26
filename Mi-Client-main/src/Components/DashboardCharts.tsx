@@ -10,20 +10,20 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { useTicketsQuery, usePriorityQuery, useStatusQuery, useUsersQuery } from '../Query/useQuery';
+import { useTicketsQuery, usePriorityQuery, useStatusQuery } from '../Query/useQuery';
 import type { Ticket } from '../types/ticket';
-import type { UserDetails } from '../types/user';
+
 
 export const DashboardCharts: React.FC = () => {
   const ticketsQuery = useTicketsQuery();
   const prioritiesQuery = usePriorityQuery();
   const statusesQuery = useStatusQuery();
-  const usersQuery = useUsersQuery();
+  
 
   const ticketsArray = (ticketsQuery.data as Ticket[]) || [];
   const prioritiesData = (Array.isArray(prioritiesQuery.data) ? prioritiesQuery.data : []) as any[];
   const statusesData = (Array.isArray(statusesQuery.data) ? statusesQuery.data : []) as any[];
-  const usersArray = (Array.isArray(usersQuery.data) ? usersQuery.data : []) as UserDetails[];
+  
 
   // Calculate tickets by status
   const ticketsByStatus = useMemo(() => {
@@ -46,28 +46,9 @@ export const DashboardCharts: React.FC = () => {
   }, [ticketsArray, prioritiesData]);
 
   // Calculate users by role
-  const usersByRole = useMemo(() => {
-    const roleCounts = {
-      admin: 0,
-      agent: 0,
-      customer: 0,
-    };
+  
 
-    usersArray.forEach((user) => {
-      if (user.role in roleCounts) {
-        roleCounts[user.role as keyof typeof roleCounts]++;
-      }
-    });
-
-    return Object.entries(roleCounts)
-      .filter(([_, count]) => count > 0)
-      .map(([role, count]) => ({
-        name: role.charAt(0).toUpperCase() + role.slice(1),
-        value: count,
-      }));
-  }, [usersArray]);
-
-  const COLORS = ['#2563eb', '#10b981', '#f59e0b'];
+  
   const TOOLTIP_STYLE = {
     backgroundColor: '#fff',
     border: '1px solid #e2e8f0',
