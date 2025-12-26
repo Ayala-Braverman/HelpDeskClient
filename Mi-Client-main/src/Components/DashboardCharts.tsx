@@ -3,9 +3,6 @@ import { Box, Typography } from '@mui/material';
 import {
   AreaChart,
   Area,
-  PieChart,
-  Pie,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -138,39 +135,7 @@ export const DashboardCharts: React.FC = () => {
         )}
       </Box>
 
-      {/* Users by Role Chart */}
-      <Box sx={{ py: 3 }}>
-        <Box sx={{ backgroundColor: '#ffffff', borderRadius: '8px', p: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: '#1e293b' }}>
-            Users by Role
-          </Typography>
-          {usersByRole.length > 0 ? (
-            <ResponsiveContainer width="100%" height={450}>
-              <PieChart>
-                <Pie
-                  data={usersByRole}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {usersByRole.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={TOOLTIP_STYLE} />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <Typography variant="body2" sx={{ color: '#94a3b8', textAlign: 'center', py: 4 }}>
-              No data available
-            </Typography>
-          )}
-        </Box>
-      </Box>
+
     </Box>
   );
 };
