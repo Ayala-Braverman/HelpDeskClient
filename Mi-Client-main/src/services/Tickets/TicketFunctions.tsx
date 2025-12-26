@@ -226,7 +226,7 @@ export const UpdateTicketWrapper: React.FC = () => {
             description: string;
         };
 
-    if (!id) return <div>לא נמצא id</div>;
+    if (!id) return <div>ID not found</div>;
 
     return (
         <UpdateTicket
@@ -272,15 +272,15 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
             queryClient.invalidateQueries({ queryKey: TICKETS_QUERT_KEY });
             Swal.fire({
                 icon: "success",
-                title: "הצלחה!",
-                text: "הפנייה עודכנה בהצלחה.",
+                title: "Success!",
+                text: "Ticket updated successfully.",
             }).then(() => navigate(`/ticket/${id}`));
         }
         catch (error) {
             Swal.fire({
                 icon: "error",
-                title: "שגיאה",
-                text: error instanceof Error ? error.message : "עדכון הפנייה נכשל! אנא נסה שוב.",
+                title: "Error",
+                text: error instanceof Error ? error.message : "Failed to update ticket! Please try again.",
             });
         }
     }
@@ -289,14 +289,14 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
         <Container maxWidth="md">
             <Box sx={{ py: 3 }}>
                 <Button startIcon={<BackIcon />} onClick={() => navigate(-1)} sx={{ mb: 2, color: '#2563eb' }}>
-                    חזור
+                    Back
                 </Button>
 
                 <Card sx={{ border: '1px solid #e2e8f0' }}>
                     <CardHeader
                         title={
                             <Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b' }}>
-                                עדכון פנייה #{id}
+                                Update Ticket #{id}
                             </Typography>
                         }
                     />
@@ -306,7 +306,7 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
                             <Stack spacing={3}>
                                 <Box sx={{ backgroundColor: '#f8fafc', p: 2, borderRadius: '0.5rem', border: '1px solid #e2e8f0' }}>
                                     <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b' }}>
-                                        נושא נוכחי
+                                        Current Subject
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: '#1e293b', mt: 1 }}>
                                         {subject}
@@ -314,10 +314,10 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
                                 </Box>
 
                                 <FormControl fullWidth error={!!errors.priority_id}>
-                                    <InputLabel>עדיפות</InputLabel>
+                                    <InputLabel>Priority</InputLabel>
                                     <Select
                                         defaultValue={priority_id}
-                                        label="עדיפות"
+                                        label="Priority"
                                         {...register("priority_id", { valueAsNumber: true })}
                                         disabled={isSubmitting}
                                     >
@@ -333,10 +333,10 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
                                 </FormControl>
 
                                 <FormControl fullWidth error={!!errors.status_id}>
-                                    <InputLabel>סטטוס</InputLabel>
+                                    <InputLabel>Status</InputLabel>
                                     <Select
                                         defaultValue={status_id}
-                                        label="סטטוס"
+                                        label="Status"
                                         {...register("status_id", { valueAsNumber: true })}
                                         disabled={isSubmitting}
                                     >
@@ -352,10 +352,10 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
                                 </FormControl>
 
                                 <FormControl fullWidth error={!!errors.assigned_to}>
-                                    <InputLabel>הוקצה ל</InputLabel>
+                                    <InputLabel>Assigned To</InputLabel>
                                     <Select
                                         defaultValue={assigned_to}
-                                        label="הוקצה ל"
+                                        label="Assigned To"
                                         {...register("assigned_to", { valueAsNumber: true })}
                                         disabled={isSubmitting}
                                     >
@@ -382,7 +382,7 @@ export const UpdateTicket: React.FC<{ id: number, status_id: number, priority_id
                                     }}
                                     fullWidth
                                 >
-                                    {isSubmitting ? 'מעדכן...' : 'עדכון פנייה'}
+                                    {isSubmitting ? 'Updating...' : 'Update Ticket'}
                                 </Button>
                             </Stack>
                         </form>
